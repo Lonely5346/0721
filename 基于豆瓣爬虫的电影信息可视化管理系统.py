@@ -119,9 +119,10 @@ def search_title(keyword):
     plt.ylabel('数量')
     plt.title(f"包含 '{keyword}' 的电影数量")
     plt.show()
+
 my_favorites = []
+
 def add_to_favorites(movie_title):
-    """将电影添加到收藏列表"""
     for movie in movie_dict["subjects"]:
         if movie["title"] == movie_title:
             my_favorites.append(movie)
@@ -130,7 +131,6 @@ def add_to_favorites(movie_title):
     print(f"未找到电影《{movie_title}》，无法添加到收藏。")
 
 def view_favorites():
-    """查看收藏的电影"""
     if not my_favorites:
         print("\n收藏列表为空!")
         return
@@ -152,11 +152,74 @@ def view_favorites():
     plt.tight_layout()
     plt.show()
 
+def remove_favorites(movie_title):
+    """从收藏列表中删除电影"""
+    for movie in my_favorites:
+        if movie["title"] == movie_title:
+            my_favorites.remove(movie)
+            print(f"电影《{movie_title}》已从收藏中删除！")
+            return
+    print(f"未找到电影《{movie_title}》在收藏列表中。")
+
+
+users = {}
+current_user = None
+global tempt
+tempt = 1
+def register():
+    print("\n=== 用户注册 ===")
+    print("注意:用户名和密码不能均为0.")
+    while True:
+        username = input("请输入用户名：")
+        if username in users:
+            print("用户名已存在，请重新输入。")
+        else:
+            break
+    password = input("请输入密码：")
+    users[username] = password
+    print("注册成功，请登录。")
+    print("''''''''''''''''''''''''''''''''''''''''''''")
+    
+def login():
+    print("\n=== 用户登录 ===")
+    while True:
+        username = input("请输入用户名：")
+        password = input("请输入密码：")
+        if username in users and users[username] == password:
+            print(f"欢迎，{username}！")
+            return username
+        else:
+            print("用户名或密码错误，请重试，或输入两次'0'退出系统。")
+            if username == '0':
+                return '0'
+
+
+
+
 def main():
     print("''''''''''''''''''''''''''''''''''''''''''''")
-    print("欢迎使用(豆瓣)电影信息管理系统V1.1")
-    print("注意:所有电影信息均来自豆瓣API,数据仅供参考.")
+    print("欢迎使用(豆瓣)电影信息管理系统V2.1")
+    print("注意:所有电影信息均来自豆瓣,数据仅供参考.")
     print("''''''''''''''''''''''''''''''''''''''''''''")
+    while True:
+        print("\n1. 注册")
+        print("2. 登录")
+        print("3. 退出")
+        op = input("请选择操作：")
+        if op == "1":
+            register()
+        elif op == "2":
+            current_user = login()
+            break
+        elif op == "3":
+            print("退出系统。")
+            return
+        else:
+            print("无效选择，请重试。")
+    if current_user == '0':
+        print("退出系统。")
+        return
+            
     while True:
         print("\n电影信息管理系统功能列表:")
         print("1. 显示所有电影")
@@ -165,7 +228,8 @@ def main():
         print("4. 搜索电影标题")
         print("5. 添加电影到收藏")
         print("6. 查看我的收藏")
-        print("7. 退出")
+        print("7. 删除收藏的电影")
+        print("8. 退出")
         choice = input("请选择操作：")
 
         if choice == "1":
@@ -184,6 +248,9 @@ def main():
         elif choice == "6":
             view_favorites()
         elif choice == "7":
+            movie_title = input("请输入要删除的收藏电影标题：")
+            remove_favorites(movie_title)
+        elif choice == "8":
             print("退出系统。")
             break
         else:
